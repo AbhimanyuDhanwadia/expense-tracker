@@ -49,6 +49,22 @@ To enable Google Sign-In and cross-device syncing, you need to set up a Firebase
    ```
 5. Restart the development server. The "Log in" options will automatically appear on the Landing Page.
 
+### 3. Local Emulator Suite (Temporary Database)
+If you want to test the full sign-in and cloud database capabilities completely locally without configuring a real Firebase project yet, you can use the Local Emulator Suite.
+
+1. Install Java (required by Firebase emulators).
+2. Set the emulator flag in your `.env` file:
+   ```env
+   VITE_USE_EMULATORS=true
+   ```
+3. Run the development server and emulators together:
+   ```bash
+   npm run dev:emulators
+   ```
+   - The app will run at `http://127.0.0.1:3000`.
+   - The Emulator UI will be available at `http://localhost:4000`.
+   - You can click "Log in" and create fake user accounts that live purely in your local emulator!
+
 ## Building for Production
 To build the application for deployment:
 ```bash

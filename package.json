@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=127.0.0.1",
+    "dev:emulators": "VITE_USE_EMULATORS=true npm-run-all --parallel emulators vite",
+    "emulators": "firebase emulators:start --only auth,firestore",
+    "vite": "vite --port=3000 --host=127.0.0.1",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
@@ -23,8 +26,10 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.14",
-    "@vitejs/plugin-react": "^5.0.4",
     "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "firebase-tools": "^15.23.0",
+    "npm-run-all": "^4.1.5",
     "tailwindcss": "^4.1.14",
     "typescript": "~5.8.2",
     "vite": "^6.2.3"

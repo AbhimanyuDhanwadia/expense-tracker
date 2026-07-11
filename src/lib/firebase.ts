@@ -1,6 +1,6 @@
 import { FirebaseOptions, getApp, getApps, initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import fallbackFirebaseConfig from '../../firebase-applet-config.json';
 
 const firebaseConfig: FirebaseOptions = {
@@ -20,15 +20,24 @@ const missingFirebaseKeys = ['apiKey', 'authDomain', 'projectId', 'appId'].filte
   (key) => !firebaseConfig[key as keyof FirebaseOptions],
 );
 
+const useEmulators = import.meta.env.VITE_USE_EMULATORS === 'true';
+
 const isDummyConfig = firebaseConfig.apiKey === 'AIzaSyA20awLTBTCJ9fuSKl3zhTEa5uzcpVh0Fo' || firebaseConfig.apiKey === 'your-api-key';
-export const isFirebaseReady = missingFirebaseKeys.length === 0 && !isDummyConfig;
+export const isFirebaseReady = (missingFirebaseKeys.length === 0 && !isDummyConfig) || useEmulators;
 
 if (!isFirebaseReady) {
   console.warn(`Firebase is not properly configured (missing or dummy keys). App will run in local-only Guest mode.`);
 }
 
-const app = isFirebaseReady ? (getApps().length > 0 ? getApp() : initializeApp(firebaseConfig)) : null;
+const isNewApp = getApps().length === 0;
+const app = isFirebaseReady ? (isNewApp ? initializeApp(firebaseConfig) : getApp()) : null;
 
 export const db = app ? (firestoreDatabaseId ? getFirestore(app, firestoreDatabaseId) : getFirestore(app)) : null;
 export const auth = app ? getAuth(app) : null;
 export const googleProvider = app ? new GoogleAuthProvider() : null;
+
+if (useEmulators && isNewApp && db && auth) {
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+  connectAuthEmulator(auth, 'http://127.0.0.1:9099');
+  console.log('Connected to Firebase Local Emulator Suite');
+}
