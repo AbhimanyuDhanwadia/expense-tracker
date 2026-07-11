@@ -3,7 +3,7 @@ import { Expense, Payday, Refund } from '../types';
 
 type ExportRow = Record<string, string | number>;
 
-function escapeCsvValue(value: string | number) {
+export function escapeCsvValue(value: string | number) {
   const text = String(value);
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
@@ -21,7 +21,7 @@ function downloadTextFile(filename: string, content: string, mimeType: string) {
   URL.revokeObjectURL(url);
 }
 
-function toCsv(rows: ExportRow[]) {
+export function toCsv(rows: ExportRow[]) {
   if (rows.length === 0) return '';
 
   const headers = Object.keys(rows[0]);
