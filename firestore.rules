@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/tracker/state {
+      allow read, write: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'expenses',
+          'refunds',
+          'paydays',
+          'categories',
+          'updatedAt'
+        ]);
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
