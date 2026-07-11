@@ -58,7 +58,7 @@ export function useSyncedState<T>(key: string, initialValue: T) {
   useEffect(() => {
     const localValue = readStoredValue(localStorageKey, readStoredValue(key, defaultValue));
 
-    if (!userId || isGuest) {
+    if (!userId || isGuest || !db) {
       setStoredValue(localValue);
       setMeta({ error: null, isRemote: false, loading: false });
       return undefined;
@@ -115,7 +115,7 @@ export function useSyncedState<T>(key: string, initialValue: T) {
 
         writeStoredValue(localStorageKey, nextValue);
 
-        if (userId && !isGuest) {
+        if (userId && !isGuest && db) {
           const trackerDoc = doc(db, 'users', userId, 'tracker', 'state');
           void setDoc(
             trackerDoc,

@@ -20,33 +20,11 @@ A production-ready React expense tracker that runs locally today and is structur
 - Firebase Auth and Firestore
 - date-fns
 
-## Local Setup
+## Setup and Running Locally
 
-1. Install dependencies:
+Please see the [RUNNING.md](RUNNING.md) file for detailed instructions on how to set up the project locally in either Guest Mode or Cloud Sync Mode.
 
-   ```bash
-   npm install
-   ```
-
-2. Copy the environment template:
-
-   ```bash
-   cp .env.example .env.local
-   ```
-
-3. Fill in the Firebase values in `.env.local`.
-
-   The current AI Studio Firebase config remains as a local fallback in `firebase-applet-config.json`, but production deployments should use environment variables.
-
-4. Start the local app:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Open the local URL printed by Vite, usually `http://localhost:3000`.
-
-## Firebase Setup
+## Firebase Setup (For Production/Sync)
 
 Enable these Firebase products before using sign-in and sync:
 

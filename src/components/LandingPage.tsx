@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowRight, BarChart3, Receipt, Shield, Star, Wallet, Zap } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import LiquidBackground from './LiquidBackground';
+import { isFirebaseReady } from '../lib/firebase';
 
 export default function LandingPage() {
   const { user, signInWithGoogle, signInAsGuest } = useAuth();
@@ -41,12 +42,14 @@ export default function LandingPage() {
               >
                 Guest Access
               </button>
-              <button 
-                onClick={signInWithGoogle}
-                className="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-full transition-colors active:scale-[0.98] text-sm"
-              >
-                Log in
-              </button>
+              {isFirebaseReady && (
+                <button 
+                  onClick={signInWithGoogle}
+                  className="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-full transition-colors active:scale-[0.98] text-sm"
+                >
+                  Log in
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -94,13 +97,15 @@ export default function LandingPage() {
               </Link>
             ) : (
               <>
-                <button 
-                  onClick={signInWithGoogle}
-                  className="group flex items-center justify-center gap-2 h-14 px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full w-full sm:w-auto transition-all shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40"
-                >
-                  Get Started for Free
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                {isFirebaseReady && (
+                  <button 
+                    onClick={signInWithGoogle}
+                    className="group flex items-center justify-center gap-2 h-14 px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full w-full sm:w-auto transition-all shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40"
+                  >
+                    Get Started for Free
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                )}
                 <button 
                   onClick={handleGuestLogin}
                   className="group flex items-center justify-center gap-2 h-14 px-8 bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 font-semibold rounded-full w-full sm:w-auto transition-all shadow-sm"
@@ -285,13 +290,15 @@ export default function LandingPage() {
               </Link>
             ) : (
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-                <button 
-                  onClick={signInWithGoogle}
-                  className="group flex items-center justify-center gap-2 h-14 px-8 bg-black hover:bg-gray-800 text-white font-semibold rounded-full transition-all shadow-lg shadow-black/20 w-full sm:w-auto"
-                >
-                  Start using Expensify
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                {isFirebaseReady && (
+                  <button 
+                    onClick={signInWithGoogle}
+                    className="group flex items-center justify-center gap-2 h-14 px-8 bg-black hover:bg-gray-800 text-white font-semibold rounded-full transition-all shadow-lg shadow-black/20 w-full sm:w-auto"
+                  >
+                    Start using Expensify
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                )}
                 <button 
                   onClick={handleGuestLogin}
                   className="group flex items-center justify-center gap-2 h-14 px-8 bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 font-semibold rounded-full transition-all shadow-sm w-full sm:w-auto"

@@ -20,12 +20,15 @@ const missingFirebaseKeys = ['apiKey', 'authDomain', 'projectId', 'appId'].filte
   (key) => !firebaseConfig[key as keyof FirebaseOptions],
 );
 
-if (missingFirebaseKeys.length > 0) {
-  throw new Error(`Missing Firebase configuration: ${missingFirebaseKeys.join(', ')}`);
+const isDummyConfig = firebaseConfig.apiKey === 'AIzaSyA20awLTBTCJ9fuSKl3zhTEa5uzcpVh0Fo' || firebaseConfig.apiKey === 'your-api-key';
+export const isFirebaseReady = missingFirebaseKeys.length === 0 && !isDummyConfig;
+
+if (!isFirebaseReady) {
+  console.warn(`Firebase is not properly configured (missing or dummy keys). App will run in local-only Guest mode.`);
 }
 
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const app = isFirebaseReady ? (getApps().length > 0 ? getApp() : initializeApp(firebaseConfig)) : null;
 
-export const db = firestoreDatabaseId ? getFirestore(app, firestoreDatabaseId) : getFirestore(app);
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
+export const db = app ? (firestoreDatabaseId ? getFirestore(app, firestoreDatabaseId) : getFirestore(app)) : null;
+export const auth = app ? getAuth(app) : null;
+export const googleProvider = app ? new GoogleAuthProvider() : null;

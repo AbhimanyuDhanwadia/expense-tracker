@@ -21,6 +21,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isGuest, setIsGuest] = useState(() => sessionStorage.getItem('isGuest') === 'true');
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       if (user) {
@@ -34,6 +39,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signInWithGoogle = async () => {
+    if (!auth || !googleProvider) {
+      console.error("Firebase Auth is not configured. Google Sign-In is unavailable.");
+      return;
+    }
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (error: any) {
@@ -55,7 +64,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setIsGuest(false);
       sessionStorage.removeItem('isGuest');
-      await auth.signOut();
+      if (auth) {
+        await auth.signOut();
+      }
     } catch (error) {
       console.error("Error signing out", error);
     }
