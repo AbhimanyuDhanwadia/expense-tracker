@@ -17,7 +17,7 @@ This guide will walk you through setting up and running the Expensify app on you
    ```bash
    npm run dev
    ```
-   The application will be available at `http://127.0.0.1:3000`.
+   The application will be available at `http://localhost:3000`.
 
 ## Modes of Operation
 
